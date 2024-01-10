@@ -38,6 +38,14 @@ public class CashierController
   {
     model.doBuy();
   }
+
+  /**
+   * Void interaction from view
+   */
+  public void doVoid()
+  {
+    model.doVoid();
+  }
   
    /**
    * Bought interaction from view

@@ -130,6 +130,10 @@ public class CashierModel extends Observable
     theState = State.process;                   // All Done
     setChanged(); notifyObservers(theAction);
   }
+
+  public void doVoid() {
+    // TODO: Add code to VOID items
+  }
   
   /**
    * Customer pays for the contents of the basket
