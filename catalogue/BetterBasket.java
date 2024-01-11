@@ -32,13 +32,14 @@ public class BetterBasket extends Basket implements Serializable, Comparator<Pro
   @Override
   public boolean remove(Product pr) {
     for (Product product : this) {
-      if (product.getProductNum().equals(pr.getProductNum())) {
+      if (product.getProductNum().equals(pr.getProductNum()) && product.getQuantity() > 0) {
         int newQuantity = product.getQuantity() - 1;
         product.setQuantity(newQuantity);
         return true;
       }
     }
 
+    // TODO: Discarding the entire product from basket doesn't work
     super.remove(pr);
     Collections.sort(this, this);
     return(true);

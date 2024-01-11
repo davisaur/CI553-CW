@@ -60,6 +60,7 @@ public class Basket extends ArrayList<Product> implements Serializable
   {                              
     return super.add( pr );     // Call add in ArrayList
   }
+  // TODO: for some reason, if i try to @Override ArrayList's remove() function, it breaks everything
   public boolean remove(Product pr) {
     return super.remove(pr);   // Call remove in ArrayList
   }
