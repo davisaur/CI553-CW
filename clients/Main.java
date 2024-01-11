@@ -40,7 +40,7 @@ class Main
 {
   // Change to false to reduce the number of duplicated clients
 
-  private final static boolean many = true;        // Many clients? (Or minimal clients)
+  private final static boolean many = false;        // Many clients? (Or minimal clients)
 
   public static void main (String args[])
   {
