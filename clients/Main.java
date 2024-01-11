@@ -21,8 +21,10 @@ import clients.warehousePick.PickView;
 import middle.LocalMiddleFactory;
 import middle.MiddleFactory;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 
 /**
@@ -63,6 +65,7 @@ class Main
     if ( many ) 
       startDisplayGUI_MVC( mlf );
     startCollectionGUI_MVC( mlf );
+    playBackgroundMusic();
   }
   
   public void startCustomerGUI_MVC(MiddleFactory mlf )
@@ -172,5 +175,33 @@ class Main
     model.addObserver( view );       // Add observer to the model
     window.setVisible(true);         // Make window visible
   }
+  private static void playBackgroundMusic() {
+    try {
+      // Load the audio file
+      File audioFile = new File("music/Carefree.wav");
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+      // Get a sound clip resource
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioStream);
+
+      // Add a listener to loop the clip
+      clip.addLineListener(new LineListener() {
+        public void update(LineEvent event) {
+          if (event.getType() == LineEvent.Type.STOP) {
+            clip.setFramePosition(0);
+            clip.start();
+          }
+        }
+      });
+
+      // Start playing
+      clip.start();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
 
 }
