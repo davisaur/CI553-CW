@@ -60,6 +60,13 @@ public class Basket extends ArrayList<Product> implements Serializable
   {                              
     return super.add( pr );     // Call add in ArrayList
   }
+  public boolean remove(Product pr) {
+    return super.remove(pr);   // Call remove in ArrayList
+  }
+
+  public boolean contains(Product pr) {
+    return super.contains(pr);   // Call contains in ArrayList
+  }
 
   /**
    * Returns a description of the products in the basket suitable for printing.

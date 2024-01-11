@@ -141,28 +141,14 @@ public class CashierModel extends Observable
       theAction = "Check the item with customer first"; // Alert User
     } else {
       if (theBasket == null){ // Otherwise, check if basket doesn't exists
-        theAction = "The Basket is Empty."; // If it doesn't, alert user
+        theAction = "The Basket is Empty."; // If basket doesn't exist, alert user
     } else {
-        int indexToRemove = -1;  // initiate index
-        for (int i = 0; i < theBasket.size(); i++) // check all products within basket
-        {
-          if (theBasket.get(i).getProductNum().equals(theProduct.getProductNum())) // if product found in basket
-          {
-            indexToRemove = i; // set indexToRemove to the index or the product in basket
-            break; // break out of loop
-          } // else keep repeating until gone through entire basket
-        }
-
-        if (indexToRemove != -1) {  // if a product has been found
+        if(theBasket.contains(theProduct)) {
           try {
-            theStock.addStock(theProduct.getProductNum(), theProduct.getQuantity()); // add back the stock of the product
-            if(theBasket.get(indexToRemove).getQuantity() > 1) { // if there's more than one of the product
-              theBasket.get(indexToRemove).setQuantity(theBasket.get(indexToRemove).getQuantity() - 1); // reduce the quantity by 1
-            } else {
-              theBasket.remove(indexToRemove); // else remove the entire product from the basket
-            }
+            theBasket.remove(theProduct);
             theAction = "Removed " +            //    tell user product was removed
                     theProduct.getDescription();  //
+            theStock.addStock(theProduct.getProductNum(), theProduct.getQuantity()); // add back the stock of the product
           } catch (StockException e) {
             DEBUG.error("CashierModel.doVoid() - %s", e.getMessage());
           }
