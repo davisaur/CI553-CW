@@ -25,6 +25,9 @@ public class DisplayView extends Canvas implements Observer
   private int H = 300;         // Height of window 
   private int W = 400;         // Width  of window 
   private String textToDisplay = "";
+  private String displayTitle = "";
+  private String[] displayCategories = {"Waiting", "Being Picked Up", "To Be Collected"};
+  private String[] displayOrders = {"", "", ""};
   private DisplayController cont= null;
   
   /**
@@ -70,13 +73,11 @@ public class DisplayView extends Canvas implements Observer
       Map<String, List<Integer> > res =
       ( (DisplayModel) aModelOfDisplay ).getOrderState();
 
-      textToDisplay = 
-           "Orders in system" + "\n" +
-           "Waiting        : " + listOfOrders( res, "Waiting" ) + 
-           "\n"  + 
-           "Being picked   : " + listOfOrders( res, "BeingPicked" ) + 
-           "\n"  + 
-           "To Be Collected: " + listOfOrders( res, "ToBeCollected" );
+      displayTitle = "Orders in system";
+      displayOrders[0] = listOfOrders( res, "Waiting" );
+      displayOrders[1] = listOfOrders( res, "BeingPicked" );
+      displayOrders[2] = listOfOrders( res, "ToBeCollected" );
+
     }
     catch ( OrderException err )
     {
@@ -126,20 +127,70 @@ public class DisplayView extends Canvas implements Observer
    * @param g Graphics context
    */
  
-  public void drawActualScreen( Graphics2D g )  // Re draw contents 
+  public void drawActualScreen( Graphics2D g )  // Re draw contents
   {
-    g.setPaint( Color.white );            // Paint Colour 
+    g.setPaint( Color.getHSBColor(0.49f,0.79f,0.74f) );            // Paint Colour
     W = getWidth(); H = getHeight();      // Current size
     
     g.setFont( font );
     g.fill( new Rectangle2D.Double( 0, 0, W, H ) );
 
-    // Draw state of system on display
-    String lines[] = textToDisplay.split("\n");
-    g.setPaint( Color.black );
-    for ( int i=0; i<lines.length; i++ )
-    {
-      g.drawString( lines[i], 0, 50 + 50*i );
+    // Dimensions and positions for the rectangles
+    int squareWidth = W / 3; // Size of each square
+    int squareHeight = H / 2;
+    int yPos = H / 2; // Y position (centered)
+
+    // Set font for text
+    Font categoryFont = new Font("Arial", Font.BOLD, 16);
+    Font titleFont = new Font("Arial", Font.BOLD, 40);
+    Font orderFont = new Font("Arial", Font.BOLD, 20);
+
+    g.setFont(titleFont);
+
+    String text = displayTitle;
+    FontMetrics fm = g.getFontMetrics();
+    int textWidth = fm.stringWidth(text);
+    int textHeight = fm.getHeight();
+
+    int textX = W / 2 - textWidth/2;
+    int textY = H/4 + textHeight/3;
+
+    g.setPaint(Color.WHITE); // Text color
+    g.drawString(text, textX, textY); // Draw text
+
+    // Draw three squares side by side with text
+    for (int i = 0; i < 3; i++) {
+      // Draw square
+      g.setPaint(Color.white); // Square fill color
+      g.fillRect(i * squareWidth, yPos , squareWidth, squareHeight); // Fill square
+      g.setPaint(Color.black); // Square border color
+      g.drawRect(i * squareWidth, yPos, squareWidth, squareHeight); // Draw square
+
+      // Draw top-centered category text in each square
+      g.setFont(categoryFont);
+      text = displayCategories[i];
+      fm = g.getFontMetrics();
+      textWidth = fm.stringWidth(text);
+      textHeight = fm.getHeight();
+
+      // Calculate position for category text
+      textX = i * squareWidth + (squareWidth - textWidth) / 2;
+      textY = yPos + textHeight;
+
+      g.setPaint(Color.black); // Text color
+      g.drawString(text, textX, textY); // Draw text
+
+      // Draw centered order numbers in each square
+      g.setFont(orderFont);
+      text = displayOrders[i];
+      textWidth = fm.stringWidth(text);
+
+      // Calculate position for order numbers
+      textX =  i * squareWidth + (squareWidth - textWidth) / 2;
+      textY = yPos + squareHeight/2 + textHeight/2;
+
+      g.setPaint(Color.black); // Text color
+      g.drawString(text, textX, textY); // Draw text
     }
     
   }
