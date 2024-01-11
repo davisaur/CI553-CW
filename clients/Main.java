@@ -6,6 +6,9 @@ import clients.cashier.BetterCashierModel;
 import clients.cashier.CashierController;
 import clients.cashier.CashierModel;
 import clients.cashier.CashierView;
+import clients.catalogue.CatalogueController;
+import clients.catalogue.CatalogueModel;
+import clients.catalogue.CatalogueView;
 import clients.collection.CollectController;
 import clients.collection.CollectModel;
 import clients.collection.CollectView;
@@ -37,7 +40,7 @@ class Main
 {
   // Change to false to reduce the number of duplicated clients
 
-  private final static boolean many = false;        // Many clients? (Or minimal clients)
+  private final static boolean many = true;        // Many clients? (Or minimal clients)
 
   public static void main (String args[])
   {
@@ -55,6 +58,9 @@ class Main
     startCustomerGUI_MVC( mlf );
     if ( many ) 
      startCustomerGUI_MVC( mlf );
+    startCatalogueGUI_MVC( mlf );
+    if ( many )
+      startCatalogueGUI_MVC( mlf );
     startCashierGUI_MVC( mlf );
     startCashierGUI_MVC( mlf );
     startBackDoorGUI_MVC( mlf );
@@ -67,17 +73,33 @@ class Main
     startCollectionGUI_MVC( mlf );
     playBackgroundMusic();
   }
-  
+
   public void startCustomerGUI_MVC(MiddleFactory mlf )
   {
     JFrame  window = new JFrame();
     window.setTitle( "Customer Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
-    
+
     CustomerModel model      = new CustomerModel(mlf);
     CustomerView view        = new CustomerView( window, mlf, pos.width, pos.height );
     CustomerController cont  = new CustomerController( model, view );
+    view.setController( cont );
+
+    model.addObserver( view );       // Add observer to the model
+    window.setVisible(true);         // start Screen
+  }
+
+  public void startCatalogueGUI_MVC(MiddleFactory mlf )
+  {
+    JFrame  window = new JFrame();
+    window.setTitle( "Catalogue Client MVC");
+    window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    Dimension pos = PosOnScrn.getPos();
+
+    CatalogueModel model      = new CatalogueModel(mlf);
+    CatalogueView view        = new CatalogueView( window, mlf, pos.width, pos.height );
+    CatalogueController cont  = new CatalogueController( model, view );
     view.setController( cont );
 
     model.addObserver( view );       // Add observer to the model
